@@ -27,26 +27,45 @@ const getRandomInteger = (min, max) => {
   return Math.floor(Math.random() * (maxFloored - minCeiled) + minCeiled);
 };
 
-const createAndSavePerson = (done) => {
-  const [lowerAgeLimit, upperAgeLimit] = [18, 45];
-  let person = new Person({
+const createPerson = ({ name, age, favoriteFoods }) =>
+  new Person({
+    name,
+    age,
+    favoriteFoods,
+  });
+
+const createRandomPerson = (age) => {
+  return createPerson({
     name: getRandomFullName(),
-    age: getRandomInteger(lowerAgeLimit, upperAgeLimit),
+    age: getRandomInteger(age[0], age[1]),
     favoriteFoods: ["pasta", "tacos", "protein shakes"],
   });
+};
+
+const savePerson = (person, done = () => {}) => {
   person
     .save()
     .then((doc) => {
       done(null, doc);
-      console.log("Person created: " + doc);
+      console.log("Person saved: " + doc);
     })
     .catch((err) => {
       console.log(err);
     });
 };
 
+const createAndSavePerson = (done) => {
+  const age = [18, 45];
+  let person = createRandomPerson(age);
+  savePerson(person, done);
+};
+
 const createManyPeople = (arrayOfPeople, done) => {
-  done(null /*, data*/);
+  arrayOfPeople.forEach((person) => {
+    console.log(person);
+    savePerson(createPerson(person));
+  });
+  done(null, arrayOfPeople);
 };
 
 const findPeopleByName = (personName, done) => {
