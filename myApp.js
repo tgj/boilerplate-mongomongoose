@@ -160,11 +160,11 @@ const removeManyPeople = (done) => {
 const queryChain = (done) => {
   const foodToSearch = "burrito";
   const filter = { favoriteFoods: { $in: [foodToSearch] } };
-  const includedFields = ["name", "favoriteFoods"].join(" ");
-  Person.find(filter, includedFields)
+  const includedFields = "name favoriteFoods";
+  Person.find(filter)
     .sort({ name: 1 })
     .limit(2)
-    .select({ favoriteFoods: true })
+    .select(includedFields)
     .exec()
     .then((docs) => {
       console.log("People found: ", docs);
