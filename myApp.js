@@ -61,26 +61,36 @@ const createAndSavePerson = (done) => {
 };
 
 const createManyPeople = (arrayOfPeople, done) => {
-  Person.create(arrayOfPeople).then((doc) => {
-    done(null, doc);
-  });
+  Person.create(arrayOfPeople)
+    .then((doc) => {
+      done(null, doc);
+      console.log("People saved: " + arrayOfPeople);
+    })
+    .catch((err) => {
+      console.log(err);
+    });
 };
 
 const findPeopleByName = (personName, done) => {
-  Person.find(
-    { name: { $regex: personName, $options: "i" } },
-    (err, person) => {
-      if (err) {
-        console.log(err);
-      } else {
-        done(null, person);
-      }
-    }
-  );
+  Person.find({ name: { $regex: personName, $options: "i" } })
+    .then((doc) => {
+      console.log("Person found: " + doc);
+      done(null, doc);
+    })
+    .catch((err) => {
+      console.log(err);
+    });
 };
 
 const findOneByFood = (food, done) => {
-  done(null /*, data*/);
+  Person.findOne({ favoriteFoods: { $regex: food, $options: "i" } })
+    .then((doc) => {
+      console.log("Person found: " + doc);
+      done(null, doc);
+    })
+    .catch((err) => {
+      console.log(err);
+    });
 };
 
 const findPersonById = (personId, done) => {
