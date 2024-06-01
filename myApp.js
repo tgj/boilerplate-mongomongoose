@@ -1,12 +1,17 @@
 require("dotenv").config();
 let mongoose = require("mongoose");
+let PersonModel = require("./models/person");
 
 mongoose.connect(process.env.MONGO_URI, {
   useNewUrlParser: true,
   useUnifiedTopology: true,
 });
 
-let Person;
+let Person = new PersonModel({
+  name: "Tyler Johnston",
+  age: 30,
+  favoriteFoods: ["pasta", "tacos", "protein shakes"],
+});
 
 const createAndSavePerson = (done) => {
   done(null /*, data*/);
