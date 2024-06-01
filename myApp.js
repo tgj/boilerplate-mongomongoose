@@ -61,11 +61,11 @@ const createAndSavePerson = (done) => {
 };
 
 const createManyPeople = (arrayOfPeople, done) => {
-  arrayOfPeople.forEach((person) => {
-    console.log(person);
-    savePerson(createPerson(person));
-  });
-  done(null, arrayOfPeople);
+  const peopleArray = arrayOfPeople.map((person) => createPerson(person));
+  Promise.all[
+    (peopleArray.forEach((person) => savePerson(person)),
+    done(null, arrayOfPeople))
+  ];
 };
 
 const findPeopleByName = (personName, done) => {
