@@ -9,7 +9,20 @@ mongoose.connect(process.env.MONGO_URI, {
 let Person = require("./models/person");
 
 const createAndSavePerson = (done) => {
-  done(null /*, data*/);
+  let person = new Person({
+    name: "Tyler Johnston",
+    age: 30,
+    favoriteFoods: ["pasta", "tacos", "protein shakes"],
+  });
+  person
+    .save()
+    .then((doc) => {
+      console.log(doc);
+    })
+    .catch((err) => {
+      console.log(err);
+    });
+  done(null, person);
 };
 
 const createManyPeople = (arrayOfPeople, done) => {
