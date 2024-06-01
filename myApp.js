@@ -67,10 +67,16 @@ const createManyPeople = (arrayOfPeople, done) => {
 };
 
 const findPeopleByName = (personName, done) => {
-  let person = Person.find({ name: personName });
-  if (person) {
-    done(null, person);
-  }
+  Person.find(
+    { name: { $regex: personName, $options: "i" } },
+    (err, person) => {
+      if (err) {
+        console.log(err);
+      } else {
+        done(null, person);
+      }
+    }
+  );
 };
 
 const findOneByFood = (food, done) => {
