@@ -64,7 +64,7 @@ const createManyPeople = (arrayOfPeople, done) => {
   Person.create(arrayOfPeople)
     .then((doc) => {
       done(null, doc);
-      console.log("People saved: " + arrayOfPeople);
+      console.log("People saved: " + doc);
     })
     .catch((err) => {
       console.log(err);
@@ -132,7 +132,14 @@ const findAndUpdate = (personName, done) => {
 };
 
 const removeById = (personId, done) => {
-  done(null /*, data*/);
+  Person.findByIdAndDelete(personId)
+    .then((doc) => {
+      console.log("Person removed: " + doc);
+      done(null, doc);
+    })
+    .catch((err) => {
+      console.log(err);
+    });
 };
 
 const removeManyPeople = (done) => {
