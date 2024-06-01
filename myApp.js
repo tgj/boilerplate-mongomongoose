@@ -159,8 +159,9 @@ const removeManyPeople = (done) => {
 
 const queryChain = (done) => {
   const foodToSearch = "burrito";
-  const filter = { favoriteFoods: [foodToSearch] };
-  Person.find(filter)
+  const filter = { favoriteFoods: foodToSearch };
+  const includedFields = ["name", "favoriteFoods"].split(" ");
+  Person.find(filter, includedFields)
     .sort({ name: 1 })
     .limit(2)
     .select({ favoriteFoods: true })
