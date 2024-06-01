@@ -1,5 +1,10 @@
 require("dotenv").config();
 let mongoose = require("mongoose");
+const {
+  uniqueNamesGenerator,
+  Config,
+  names,
+} = require("unique-names-generator");
 
 mongoose.connect(process.env.MONGO_URI, {
   useNewUrlParser: true,
@@ -8,21 +13,36 @@ mongoose.connect(process.env.MONGO_URI, {
 
 let Person = require("./models/person");
 
+const getRandomFullName = () => {
+  const dictionaryConfig = {
+    dictionaries: [names],
+  };
+  return `${uniqueNamesGenerator(dictionaryConfig)} ${uniqueNamesGenerator(
+    dictionaryConfig
+  )}`;
+};
+const getRandomInteger = (min, max) => {
+  const minCeiled = Math.ceil(min);
+  const maxFloored = Math.floor(max);
+  return Math.floor(Math.random() * (maxFloored - minCeiled) + minCeiled);
+};
+
 const createAndSavePerson = (done) => {
+  const [lowerAgeLimit, upperAgeLimit] = [18, 45];
   let person = new Person({
-    name: "Tyler Johnston",
-    age: 30,
+    name: getRandomFullName(),
+    age: getRandomInteger(lowerAgeLimit, upperAgeLimit),
     favoriteFoods: ["pasta", "tacos", "protein shakes"],
   });
   person
     .save()
     .then((doc) => {
-      console.log(doc);
+      done(null, doc);
+      console.log("Person created: " + doc);
     })
     .catch((err) => {
       console.log(err);
     });
-  done(null, person);
 };
 
 const createManyPeople = (arrayOfPeople, done) => {
